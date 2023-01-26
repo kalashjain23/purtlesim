@@ -14,9 +14,9 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='kalash',
-    maintainer_email='kalashjain513@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer_email='kalashjain124@gmail.com',
+    description='Police turtle chasing the thieves',
+    license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
