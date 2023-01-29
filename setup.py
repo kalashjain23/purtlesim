@@ -20,6 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'spawner = turtlechaser.spawner:main',
+            'chaser = turtlechaser.controller:main'
         ],
     },
 )
