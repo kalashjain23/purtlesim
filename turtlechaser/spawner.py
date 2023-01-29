@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import random
+import time
 from functools import partial
 
 import rclpy
@@ -15,15 +16,16 @@ class Spawner(Node):
         super().__init__("spawner")
         self.x_ = 0
         self.y_ = 0
-        self.name_ = ""
+        self.name_ = "spawned"
         self.spawn_turtle()
         
         self.chaser_position_subscriber_ = self.create_subscription(Pose, "turtle1/pose", self.callback_chased, 10)
-        self.timer_ = self.create_timer(10.0, self.spawn_turtle)
         
     def callback_chased(self, chaser_position):
-        if chaser_position.x - self.spawned_x_ < 0.4 and chaser_position.y - self.spawned_y_ < 0.4:
+        if abs(chaser_position.x - self.x_) < 0.4 and abs(chaser_position.y - self.y_) < 0.4:
             self.kill_turtle()
+            time.sleep(1.0)
+            self.spawn_turtle()
         else: pass
     
     def kill_turtle(self):
@@ -47,14 +49,13 @@ class Spawner(Node):
             self.get_logger().warn("Waiting for the chaser to spawn..")
             
         turtle_to_spawn = Spawn.Request()
-        turtle_to_spawn.x = round(random.uniform(0.0, 11.0), 3)
-        turtle_to_spawn.y = round(random.uniform(0.0, 11.0), 3)
+        turtle_to_spawn.x = random.uniform(0.0, 11.0)
+        turtle_to_spawn.y = random.uniform(0.0, 11.0)
         turtle_to_spawn.theta = random.uniform(-3, 3)
-        turtle_to_spawn.name = "chased"
+        turtle_to_spawn.name = self.name_
         
         self.x_ = turtle_to_spawn.x
         self.y_ = turtle_to_spawn.y
-        self.name_ = turtle_to_spawn.name
         
         future = spawner.call_async(turtle_to_spawn)
         future.add_done_callback(partial(self.future_callback, spawned_x=turtle_to_spawn.x, spawned_y=turtle_to_spawn.y))
