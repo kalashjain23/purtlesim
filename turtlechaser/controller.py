@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import math
 
 import rclpy
 from rclpy.node import Node
@@ -12,6 +13,7 @@ class TurtleController(Node):
         super().__init__("controller")
         self.chaser_x_ = 0
         self.chaser_y_ = 0
+        self.chaser_theta_ = 0
         self.spawned_x_ = 0
         self.spawned_y_ = 0
         
@@ -26,16 +28,20 @@ class TurtleController(Node):
     def set_chaser_position(self, position):
         self.chaser_x_ = position.x
         self.chaser_y_ = position.y
+        self.chaser_theta_ = position.theta
         
         self.chaser_to_turtle()
         
     def chaser_to_turtle(self):
         velocity = Twist()
+        P_LINEAR = 0.5
+        P_ANGULAR = 4.0
         
-        if(self.chaser_x_ < self.spawned_x_):
-            velocity.linear.x = 2.0
-        else:
-            velocity.linear.x = 0.0
+        distance = math.sqrt(((self.spawned_x_-self.chaser_x_)**2) + ((self.spawned_x_-self.chaser_x_)**2))
+        angle = math.atan2(self.spawned_y_-self.chaser_y_, self.spawned_x_-self.chaser_x_)
+        
+        velocity.angular.z = P_ANGULAR * (angle-self.chaser_theta_)
+        velocity.linear.x = P_LINEAR * distance
         
         self.velocity_publisher_.publish(velocity)
 
