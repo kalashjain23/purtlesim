@@ -22,7 +22,7 @@ class Spawner(Node):
         self.chaser_position_subscriber_ = self.create_subscription(Pose, "turtle1/pose", self.callback_chased, 10)
         
     def callback_chased(self, chaser_position):
-        if abs(chaser_position.x - self.x_) < 0.7 and abs(chaser_position.y - self.y_) < 0.7:
+        if abs(chaser_position.x - self.x_) < 0.5 and abs(chaser_position.y - self.y_) < 0.5:
             self.kill_turtle()
             time.sleep(0.1)
             self.spawn_turtle()
