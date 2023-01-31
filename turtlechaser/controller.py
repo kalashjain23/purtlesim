@@ -34,13 +34,19 @@ class TurtleController(Node):
         
     def chaser_to_turtle(self):
         velocity = Twist()
-        P_LINEAR = 0.5
-        P_ANGULAR = 4.0
+        P_LINEAR = 2.0
+        P_ANGULAR = 6.0
         
         distance = math.sqrt(((self.spawned_x_-self.chaser_x_)**2) + ((self.spawned_y_-self.chaser_y_)**2))
         desired_angle = math.atan2(self.spawned_y_-self.chaser_y_, self.spawned_x_-self.chaser_x_)
         
-        velocity.angular.z = P_ANGULAR * (desired_angle-self.chaser_angle_)
+        diff = desired_angle-self.chaser_angle_
+        if diff > math.pi:
+            diff -= 2*math.pi
+        elif diff < -1*math.pi:
+            diff += 2*math.pi
+            
+        velocity.angular.z = P_ANGULAR * (diff)
         velocity.linear.x = P_LINEAR * distance
         
         self.velocity_publisher_.publish(velocity)
