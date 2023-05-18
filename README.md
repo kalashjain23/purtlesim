@@ -37,5 +37,7 @@ source ~/turtlechaser_ws/install/setup.bash
 
 # launch the nodes
 ros2 launch turtlechaser turtlechaser.launch.py
-```
-*Now you should be enjoying a turtle chasing other turtles on its own :D*
+```  
+*Now you should be enjoying watching a turtle chasing other turtles on its own :D*
+
+https://github.com/kalashjain23/turtlechaser/assets/97672680/782779d1-5e2d-4274-8ac7-a406b8cc8c99
